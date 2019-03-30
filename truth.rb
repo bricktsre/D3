@@ -1,15 +1,8 @@
 require 'sinatra'
 require 'sinatra/reloader'
 
-def invalid_parameters
-  puts 'invalid parameters'
-  erb :invalid_parameters_error
-end
-
-
 def check_args(t, f, size)
-  puts "Value of size #{size.to_i}"
-  if size.to_i < 2
+  if size < 2
     return false
   elsif t == f
     return false
@@ -17,6 +10,30 @@ def check_args(t, f, size)
     return false
   end
   true
+end
+
+def data(size)
+  data = Array.new((2 ** size),0){Array.new(size,0)}
+  data.each_index do |x|
+    temp = x
+    data[0].each_index do |y|
+      if temp - (2 ** ((size-1)-y)) >= 0
+        data[x][y] = 1
+	temp -= (2 ** ((size-1)-y))
+      end
+    end
+  end  
+  data
+end
+
+def generate_table(t, f, size)
+  data=data(size)
+  (0...data.size).each do |x|
+    (0...data[0].size).each do |y|
+      print (data[x][y] == 1 ? "#{t}" : "#{f}")
+    end
+    puts
+  end
 end
 
 get '/' do
@@ -31,11 +48,16 @@ end
 
 get '/table' do
   puts 'table called'
-  t_symbol, f_symbol, size = params['true'], params['false'], params['size']
+  t_symbol, f_symbol, size = params['true'], params['false'], params['size'].to_i
+  t_symbol = "T" if t_symbol == ""
+  f_symbol = "F" if f_symbol == ""
+  size = 3 if size == ""
+  puts "true:#{t_symbol} false:#{f_symbol} size:#{size}"
   unless check_args(t_symbol, f_symbol, size)
     puts 'invalid parameters'
     erb :invalid_parameters_error
-    return
+  else
+    puts 'Arguments are all good'
+    generate_table(t_symbol, f_symbol, size)
   end
-  puts 'Arguments are all good'
 end
