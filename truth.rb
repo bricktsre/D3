@@ -30,10 +30,11 @@ end
 
 def operations(data, size)
   data.each_index do |x|
-    data[x][size] = and_op(data[x])
-    data[x][size+1] = or_op(data[x])
-    data[x][size+2] = !and_op(data[x])
-    data[x][size+3] = !or_op(data[x])
+    temp = data[x].clone
+    data[x][size] = and_op(temp)
+    data[x][size+1] = or_op(temp)
+    data[x][size+2] = !(and_op(temp))
+    data[x][size+3] = !(or_op(temp))
   end
   data
 end
