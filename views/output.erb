@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>Output Table</title>
+  </head>
+  <body>
+    <table>
+      <tr>
+        <% (0...size).each do |x| %>
+	  <th><%= x %></th>
+        <% end %>
+        <th>AND</th>
+	<th>OR</th>
+	<th>NAND</th>
+	<th>NOR</th>
+      </tr>
+      <% chart.each do |x| %>
+        <tr>
+	<% x.each do |y| %>		
+	  <td><%= y %></td>
+	<% end %>
+	</tr>
+    <% end %>
+    </table>
+    <a href="/">Back to main page</a>	
+  </body>
+</html>
